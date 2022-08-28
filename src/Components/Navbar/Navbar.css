@@ -1,0 +1,50 @@
+.Navbar {
+  top: 0;
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: #683500;
+  height: 60px;
+  font-size: 1.4em;
+  color: #fff;
+  border-bottom: 3px solid #f3c200;
+}
+
+.DavisImg {
+  height: 50px;
+  margin-left: 5px;
+}
+
+.Hamburger {
+  width: auto;
+}
+
+.Modal {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #683500;
+  display: flex;
+  flex-flow: column;
+}
+
+.ModalText {
+  font-size: 1em;
+  color: #fff;
+  margin: 60px 30px 0px 30px;
+}
+
+.Open-false {
+  position: fixed;
+  left: 110vw;
+  transition: 200ms;
+}
+
+.Open-true {
+  position: fixed;
+  left: 0;
+  transition: 200ms;
+}
