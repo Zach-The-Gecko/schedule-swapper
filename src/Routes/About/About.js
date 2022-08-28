@@ -1,10 +1,13 @@
+import Page from "../../Components/Page/Page";
 import "./About.css";
 
 const About = () => {
   return (
-    <div className="About Page">
-      <p>About Page!</p>
-    </div>
+    <Page>
+      <div className="About">
+        <p>About Page!</p>
+      </div>
+    </Page>
   );
 };
 

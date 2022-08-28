@@ -22,6 +22,7 @@
 }
 
 .Modal {
+  padding-top: 20px;
   position: fixed;
   top: 0;
   width: 100%;
@@ -32,9 +33,18 @@
 }
 
 .ModalText {
-  font-size: 1em;
+  font-size: 1.3em;
   color: #fff;
-  margin: 60px 30px 0px 30px;
+  margin: 30px;
+  /* margin-right: auto; */
+  text-decoration: none;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #fff;
+}
+
+.ModalText:last-child {
+  color: #ffff56;
+  border-color: #ffff56;
 }
 
 .Open-false {
