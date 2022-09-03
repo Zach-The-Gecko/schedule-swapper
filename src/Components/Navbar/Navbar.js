@@ -10,7 +10,6 @@ import { signInWithGoogle, signOutUser } from "../../utils/firebase";
 const Navbar = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const { currentUser } = useContext(UserContext);
-  console.log(currentUser);
   const closeModal = () => {
     setModalOpen(false);
   };

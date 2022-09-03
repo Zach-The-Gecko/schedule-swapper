@@ -1,0 +1,12 @@
+.UsersClasses {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Go-There {
+  text-decoration: underline;
+  color: rgb(0, 123, 0);
+  margin-top: 30px;
+  font-size: 1.3em;
+}

@@ -41,10 +41,32 @@ export const createUserDocumentFromAuth = async (userAuth) => {
   if (!userSnapshot.exists()) {
     try {
       const { displayName } = userAuth;
-      set(userDocRef, { displayName });
+      await set(userDocRef, { displayName });
     } catch (err) {
       console.error(err);
     }
   }
   return userDocRef;
+};
+
+export const getUsersClassesRefs = async (uid) => {
+  const userDocRef = child(dbRef, `users/${uid}/classesRefs`);
+  try {
+    return Object.values((await get(userDocRef)).val());
+  } catch (err) {
+    console.error(err);
+  }
+
+  return userDocRef;
+};
+
+export const getPeriodsClasses = async (period) => {
+  const periodsClasses = child(dbRef, `allClasses/${period}`);
+  // try {
+  //   return Object.values();
+  // } catch (err) {
+  //   console.error(err);
+  // }
+
+  return (await get(periodsClasses)).val();
 };

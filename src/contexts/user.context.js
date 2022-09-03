@@ -3,6 +3,7 @@ import { createContext, useState, useEffect } from "react";
 import {
   onAuthStateChangedListener,
   createUserDocumentFromAuth,
+  getUsersClassesRefs,
 } from "../utils/firebase";
 
 export const UserContext = createContext({
@@ -18,7 +19,8 @@ export const UserProvider = ({ children }) => {
     const unsubscribe = onAuthStateChangedListener(async (user) => {
       if (user) {
         const userDocRef = await createUserDocumentFromAuth(user);
-        setCurrentUser({ ...user, userDocRef });
+        const usersClasses = await getUsersClassesRefs(user.uid);
+        setCurrentUser({ ...user, classes: usersClasses, userDocRef });
       } else {
         setCurrentUser(null);
       }
