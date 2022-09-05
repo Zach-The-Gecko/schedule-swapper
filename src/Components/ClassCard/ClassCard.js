@@ -4,8 +4,10 @@ import "./ClassCard.css";
 const ClassCard = ({ class_, period, onClick }) => {
   return (
     <div className={`PeriodBox Is${Boolean(class_)}`} onClick={onClick}>
-      <span className="PeriodHeading">Period {parseInt(period) + 1}</span>
-      <span className="BoxContent">{class_ && class_.class}</span>
+      <div className="Heading">
+        <span className="PeriodHeading Period">{period}</span>
+        <span className="PeriodHeading">{class_ && class_.class}</span>
+      </div>
       <span className="BoxContent">{class_ && class_.teacher}</span>
     </div>
   );

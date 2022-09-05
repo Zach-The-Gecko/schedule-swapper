@@ -15,6 +15,7 @@ import {
   query,
   orderByChild,
   equalTo,
+  push,
 } from "firebase/database";
 
 const firebaseConfig = {
@@ -58,11 +59,13 @@ export const createUserDocumentFromAuth = async (userAuth) => {
   return userDocRef;
 };
 
-export const getUsersData = async (uid) => {
+export const getUsersData = async (uid, semester) => {
   const userDocRef = child(dbRef, `users/${uid}`);
   try {
     const usersData = (await get(userDocRef)).val();
-    usersData.classesRefs = Object.values(usersData.classesRefs);
+    usersData.classesRefs = usersData.usersClassesRefs
+      ? usersData.usersClassesRefs[`Semester${semester}`]
+      : [];
     return usersData;
   } catch (err) {
     console.error(err);
@@ -90,13 +93,13 @@ export const getClassByRefID = async (reference) => {
 };
 
 export const getClassesByPeriod = async (period) => {
-  const class_ = query(
+  const classes = query(
     child(dbRef, `allClasses`),
     orderByChild("period"),
     equalTo(period)
   );
   try {
-    return Object.entries((await get(class_)).val()).map(
+    return Object.entries((await get(classes)).val()).map(
       ([classRef, otherClassData]) => {
         return { classRef, ...otherClassData };
       }
@@ -105,4 +108,18 @@ export const getClassesByPeriod = async (period) => {
     console.error(err);
   }
   return null;
+};
+
+export const submitClassToFB = async (class_, usersUid) => {
+  console.log(class_, usersUid);
+  const allClassesRef = child(dbRef, `allClasses`);
+  const newClassRef = push(allClassesRef);
+  await set(newClassRef, class_);
+
+  const usersClassRef = child(
+    dbRef,
+    `users/${usersUid}/usersClassesRefs/${class_.semester}/${class_.period}`
+  );
+  await set(usersClassRef, newClassRef.key);
+  return newClassRef.key;
 };

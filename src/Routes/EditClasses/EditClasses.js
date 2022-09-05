@@ -1,21 +1,20 @@
 import { useContext } from "react";
 import Page from "../../Components/Page/Page";
 import { UserContext } from "../../contexts/user.context";
+import { submitClassToFB } from "../../utils/firebase";
 import "./EditClasses.css";
 
 const EditClasses = () => {
-  // eslint-disable-next-line
   const { currentUser } = useContext(UserContext);
   const keyPressed = (e) => {
     if (e.key === "Enter") {
       const rawStr = e.target.value;
-      const splitStr = rawStr.split("\n");
+      const splitStr = rawStr.split("\n").reduce((validStr, currentStr) => {
+        return currentStr ? [...validStr, currentStr] : [...validStr];
+      }, []);
 
       const studentClasses = splitStr.reduce(
         (semesterClasses, str, ind, allClasses) => {
-          if (!str) {
-            return semesterClasses;
-          }
           if (str.includes("Semester")) {
             return [str.replace(" ", ""), semesterClasses[1]];
           }
@@ -28,19 +27,25 @@ const EditClasses = () => {
               period,
               class: allClasses[ind + 1],
               teacher: allClasses[ind + 2],
+              semester: semesterClasses[0],
             };
 
-            semesterClasses[1][semesterClasses[0]].push(classData);
-            period === 11 && semesterClasses[1].Semester1.push(classData);
+            semesterClasses[1].push(classData);
+            period === 11 &&
+              semesterClasses[1].push({ ...classData, semester: "Semester1" });
           }
           return semesterClasses;
         },
-        [0, { Semester1: [], Semester2: [] }]
+        [0, []]
       )[1];
 
-      console.log(studentClasses);
+      // console.log(studentClasses);
+      studentClasses.map((class_) => {
+        return submitClassToFB(class_, currentUser.uid);
+      });
     }
   };
+
   return (
     <Page>
       <div className="EditClasses">

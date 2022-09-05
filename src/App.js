@@ -10,7 +10,6 @@ import UsersClasses from "./Routes/UsersClasses/UsersClasses";
 function App() {
   return (
     <div className="App">
-      <Navbar />
       <Routes>
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/about" element={<About />} />
@@ -18,6 +17,7 @@ function App() {
         <Route path="/edit-classes" element={<EditClasses />} />
         <Route path="/" element={<Page>Root Path</Page>} />
       </Routes>
+      <Navbar />
     </div>
   );
 }

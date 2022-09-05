@@ -6,7 +6,33 @@
 
 .Go-There {
   text-decoration: underline;
-  color: rgb(0, 123, 0);
+  color: #007b00;
   margin-top: 30px;
   font-size: 1.3em;
+}
+
+.semesterBox {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.semText {
+  margin: 2px 22px;
+  padding: 5px;
+  font-size: 1.2em;
+  color: #000;
+}
+
+.sem11 {
+  border: 2px solid #007b00;
+  border-radius: 5px;
+}
+
+.sem22 {
+  border: 2px solid #007b00;
+  border-radius: 5px;
+}
+.switch {
+  margin-top: 6px;
 }

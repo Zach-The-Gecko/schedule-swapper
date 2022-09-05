@@ -18,3 +18,8 @@
 .Button:hover {
   cursor: pointer;
 }
+
+html {
+  background-color: #ffffce;
+  height: 100vh;
+}

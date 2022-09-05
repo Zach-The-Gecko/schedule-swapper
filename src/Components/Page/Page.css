@@ -1,5 +1,5 @@
 .Page {
   padding-top: 63px;
-  height: 100vh;
+  height: fit-content;
   background-color: #ffffce;
 }
