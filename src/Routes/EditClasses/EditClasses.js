@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import Page from "../../Components/Page/Page";
 import { UserContext } from "../../contexts/user.context";
-import { submitClassToFB } from "../../utils/firebase";
+import { classExists, submitClassToFB } from "../../utils/firebase";
 import "./EditClasses.css";
 
 const EditClasses = () => {
@@ -25,9 +25,9 @@ const EditClasses = () => {
             const period = parseInt(str.split(" ").slice(-1)[0]);
             const classData = {
               period,
+              semester: semesterClasses[0],
               class: allClasses[ind + 1],
               teacher: allClasses[ind + 2],
-              semester: semesterClasses[0],
             };
 
             semesterClasses[1].push(classData);
@@ -39,9 +39,13 @@ const EditClasses = () => {
         [0, []]
       )[1];
 
-      // console.log(studentClasses);
-      studentClasses.map((class_) => {
-        return submitClassToFB(class_, currentUser.uid);
+      studentClasses.map(async (class_) => {
+        const classThatExists = await classExists(class_);
+        if (!classThatExists) {
+          submitClassToFB(class_, currentUser.uid);
+        } else {
+          console.log("Class ID", classThatExists);
+        }
       });
     }
   };

@@ -111,7 +111,6 @@ export const getClassesByPeriod = async (period) => {
 };
 
 export const submitClassToFB = async (class_, usersUid) => {
-  console.log(class_, usersUid);
   const allClassesRef = child(dbRef, `allClasses`);
   const newClassRef = push(allClassesRef);
   await set(newClassRef, class_);
@@ -123,3 +122,37 @@ export const submitClassToFB = async (class_, usersUid) => {
   await set(usersClassRef, newClassRef.key);
   return newClassRef.key;
 };
+
+export const classExists = async (class_) => {
+  // console.log(class_);
+  const sameTeachersClassesQuery = query(
+    child(dbRef, `allClasses`),
+    orderByChild("teacher"),
+    equalTo(class_.teacher)
+  );
+  const sameTeachersClasses = await get(sameTeachersClassesQuery);
+  const classExists = sameTeachersClasses.exists();
+  if (classExists) {
+    const returnVal = Object.keys(sameTeachersClasses.val()).reduce(
+      (acc, classID) => {
+        const classWithSameTeacher = sameTeachersClasses.val()[classID];
+        if (
+          classWithSameTeacher.period === class_.period &&
+          classWithSameTeacher.semester === class_.semester
+        ) {
+          return classID;
+        }
+        return acc;
+      },
+      false
+    );
+    return returnVal;
+  } else {
+    return false;
+  }
+};
+// sameTeachersClasses.val().map((classWithSameTeacher) => {
+//   if (Object.entries(classWithSameTeacher) === Object.entries(class_)) {
+//     console.log("SAME CLASS DETECTED", classWithSameTeacher);
+//   }
+// });
