@@ -21,7 +21,7 @@ const UsersClasses = () => {
       const localDataFromFB = await getUsersData(uid, semester);
       setUserData(localDataFromFB);
 
-      const usersClassesRefs = localDataFromFB.classesRefs;
+      const usersClassesRefs = localDataFromFB.classes;
       const usersClassesObjs = usersClassesRefs.map((ref) => {
         return getClassByRefID(ref);
       });

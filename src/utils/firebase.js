@@ -63,23 +63,13 @@ export const getUsersData = async (uid, semester) => {
   const userDocRef = child(dbRef, `users/${uid}`);
   try {
     const usersData = (await get(userDocRef)).val();
-    usersData.classesRefs = usersData.usersClassesRefs
-      ? usersData.usersClassesRefs[`Semester${semester}`]
+    usersData.classes = usersData.classes
+      ? usersData.classes[`Semester${semester}`]
       : [];
     return usersData;
   } catch (err) {
     console.error(err);
   }
-};
-
-export const getPeriodsClasses = async (period) => {
-  const periodsClasses = child(dbRef, `allClasses/${period}`);
-  try {
-    return (await get(periodsClasses)).val();
-  } catch (err) {
-    console.error(err);
-  }
-  return [];
 };
 
 export const getClassByRefID = async (reference) => {
@@ -113,18 +103,17 @@ export const getClassesByPeriod = async (period) => {
 export const submitClassToFB = async (class_, usersUid) => {
   const allClassesRef = child(dbRef, `allClasses`);
   const newClassRef = push(allClassesRef);
-  await set(newClassRef, class_);
+  await set(newClassRef, { ...class_, users: [usersUid] });
 
   const usersClassRef = child(
     dbRef,
-    `users/${usersUid}/usersClassesRefs/${class_.semester}/${class_.period}`
+    `users/${usersUid}/classes/${class_.semester}/${class_.period}`
   );
   await set(usersClassRef, newClassRef.key);
   return newClassRef.key;
 };
 
 export const classExists = async (class_) => {
-  // console.log(class_);
   const sameTeachersClassesQuery = query(
     child(dbRef, `allClasses`),
     orderByChild("teacher"),
@@ -151,8 +140,32 @@ export const classExists = async (class_) => {
     return false;
   }
 };
-// sameTeachersClasses.val().map((classWithSameTeacher) => {
-//   if (Object.entries(classWithSameTeacher) === Object.entries(class_)) {
-//     console.log("SAME CLASS DETECTED", classWithSameTeacher);
-//   }
-// });
+
+export const changeClass = async (prevClassID, newClassID, userUid) => {
+  if (prevClassID === newClassID) {
+    return true;
+  }
+  if (prevClassID) {
+    const prevClass = await getClassByRefID(prevClassID);
+    const prevClassUsers = prevClass.users;
+    prevClassUsers.splice(prevClassUsers.indexOf(userUid));
+    const prevClassRef = child(dbRef, `allClasses/${prevClassID}`);
+    console.log(prevClass, "prevClass");
+    // WORK ON REMOVING THE USER FROM PREVIOUS CLASS ------- Its on the submitting classes part I think
+    await set(prevClassRef, prevClass);
+  }
+
+  const newClass = await getClassByRefID(newClassID);
+  const newClassUsers = newClass.users;
+  newClassUsers.push(userUid);
+  const newClassRef = child(dbRef, `allClasses/${newClassID}`);
+  await set(newClassRef, newClass);
+
+  const usersClassRef = child(
+    dbRef,
+    `users/${userUid}/classes/${newClass.semester}/${newClass.period}`
+  );
+  set(usersClassRef, newClassID);
+
+  return newClass;
+};

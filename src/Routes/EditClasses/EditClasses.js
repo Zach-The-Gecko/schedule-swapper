@@ -1,7 +1,12 @@
 import { useContext } from "react";
 import Page from "../../Components/Page/Page";
 import { UserContext } from "../../contexts/user.context";
-import { classExists, submitClassToFB } from "../../utils/firebase";
+import {
+  changeClass,
+  classExists,
+  getUsersData,
+  submitClassToFB,
+} from "../../utils/firebase";
 import "./EditClasses.css";
 
 const EditClasses = () => {
@@ -42,9 +47,22 @@ const EditClasses = () => {
       studentClasses.map(async (class_) => {
         const classThatExists = await classExists(class_);
         if (!classThatExists) {
+          console.log("Creating Brand New Class");
           submitClassToFB(class_, currentUser.uid);
         } else {
-          console.log("Class ID", classThatExists);
+          const userDataFromFB = await getUsersData(
+            currentUser.uid,
+            class_.semester.charAt(class_.semester.length - 1)
+          );
+          const usersClasses = userDataFromFB.classes;
+          if (classThatExists !== usersClasses[class_.period]) {
+            console.log("Changing Class");
+            changeClass(
+              usersClasses[class_.period],
+              classThatExists,
+              currentUser.uid
+            );
+          }
         }
       });
     }
