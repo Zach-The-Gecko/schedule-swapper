@@ -5,7 +5,11 @@ import { Link } from "react-router-dom";
 import Logo from "../../assets/davis-logo.webp";
 import { useContext } from "react";
 import { UserContext } from "../../contexts/user.context";
-import { signInWithGoogle, signOutUser } from "../../utils/firebase";
+import {
+  deleteAllClasses,
+  signInWithGoogle,
+  signOutUser,
+} from "../../utils/firebase";
 
 const Navbar = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -22,7 +26,7 @@ const Navbar = () => {
         <Link
           className="ModalText"
           onClick={closeModal}
-          to={`/users-classes/${currentUser ? currentUser.uid : "null"}`}
+          to={`/user/${currentUser ? currentUser.uid : "null"}`}
         >
           My Classes
         </Link>
@@ -55,7 +59,7 @@ const Navbar = () => {
         )}
       </div>
       <img src={Logo} alt="Davis High School Logo" className="DavisImg" />
-      <p>DHS Schedule Swapper</p>
+      <span onClick={deleteAllClasses}>DHS Schedule Swapper</span>
       <div className="Hamburger">
         <Hamburger toggled={isModalOpen} toggle={setModalOpen} />
       </div>

@@ -46,23 +46,24 @@ const EditClasses = () => {
 
       studentClasses.map(async (class_) => {
         const classThatExists = await classExists(class_);
+        const userDataFromFB = await getUsersData(
+          currentUser.uid,
+          class_.semester.charAt(class_.semester.length - 1)
+        );
+        const usersClasses = userDataFromFB.classes;
         if (!classThatExists) {
-          console.log("Creating Brand New Class");
-          submitClassToFB(class_, currentUser.uid);
-        } else {
-          const userDataFromFB = await getUsersData(
-            currentUser.uid,
-            class_.semester.charAt(class_.semester.length - 1)
+          const newClass = await submitClassToFB(class_);
+          changeClass(
+            usersClasses[class_.period] || null,
+            newClass,
+            currentUser.uid
           );
-          const usersClasses = userDataFromFB.classes;
-          if (classThatExists !== usersClasses[class_.period]) {
-            console.log("Changing Class");
-            changeClass(
-              usersClasses[class_.period],
-              classThatExists,
-              currentUser.uid
-            );
-          }
+        } else {
+          changeClass(
+            usersClasses[class_.period],
+            classThatExists,
+            currentUser.uid
+          );
         }
       });
     }

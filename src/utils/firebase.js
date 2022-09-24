@@ -51,7 +51,7 @@ export const createUserDocumentFromAuth = async (userAuth) => {
   if (!userSnapshot.exists()) {
     try {
       const { displayName } = userAuth;
-      await set(userDocRef, { displayName });
+      await set(userDocRef, { displayName, ref: userDocRef.key });
     } catch (err) {
       console.error(err);
     }
@@ -63,9 +63,11 @@ export const getUsersData = async (uid, semester) => {
   const userDocRef = child(dbRef, `users/${uid}`);
   try {
     const usersData = (await get(userDocRef)).val();
-    usersData.classes = usersData.classes
-      ? usersData.classes[`Semester${semester}`]
-      : [];
+    if (semester) {
+      usersData.classes = usersData.classes
+        ? usersData.classes[`Semester${semester}`]
+        : [];
+    }
     return usersData;
   } catch (err) {
     console.error(err);
@@ -100,16 +102,10 @@ export const getClassesByPeriod = async (period) => {
   return null;
 };
 
-export const submitClassToFB = async (class_, usersUid) => {
+export const submitClassToFB = async (class_) => {
   const allClassesRef = child(dbRef, `allClasses`);
   const newClassRef = push(allClassesRef);
-  await set(newClassRef, { ...class_, users: [usersUid] });
-
-  const usersClassRef = child(
-    dbRef,
-    `users/${usersUid}/classes/${class_.semester}/${class_.period}`
-  );
-  await set(usersClassRef, newClassRef.key);
+  await set(newClassRef, { ...class_, users: [""], ref: newClassRef.key });
   return newClassRef.key;
 };
 
@@ -150,8 +146,6 @@ export const changeClass = async (prevClassID, newClassID, userUid) => {
     const prevClassUsers = prevClass.users;
     prevClassUsers.splice(prevClassUsers.indexOf(userUid));
     const prevClassRef = child(dbRef, `allClasses/${prevClassID}`);
-    console.log(prevClass, "prevClass");
-    // WORK ON REMOVING THE USER FROM PREVIOUS CLASS ------- Its on the submitting classes part I think
     await set(prevClassRef, prevClass);
   }
 
@@ -168,4 +162,12 @@ export const changeClass = async (prevClassID, newClassID, userUid) => {
   set(usersClassRef, newClassID);
 
   return newClass;
+};
+
+export const deleteAllClasses = async () => {
+  const allClassesRef = child(dbRef, `allClasses`);
+  const usersRef = child(dbRef, `users`);
+  await set(allClassesRef, {});
+  await set(usersRef, {});
+  console.log("All Deleted!");
 };
