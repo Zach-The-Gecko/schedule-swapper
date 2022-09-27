@@ -18,15 +18,18 @@ const UsersClasses = () => {
 
   useEffect(() => {
     const asyncFunc = async () => {
-      const localDataFromFB = await getUsersData(uid, semester);
-      setUserData(localDataFromFB);
+      const userData = await getUsersData(uid, semester);
+      setUserData(userData);
+      if (!userData) {
+        return;
+      }
 
-      const usersClassesRefs = localDataFromFB.classes;
-      const usersClassesObjs = usersClassesRefs.map((ref) => {
+      const usersClassesRefs = userData.classes;
+      const usersClassesPromises = usersClassesRefs.map((ref) => {
         return getClassByRefID(ref);
       });
-      const fullfilledUsersClassesObjs = await Promise.all(usersClassesObjs);
-      setUsersClassesObjs(fullfilledUsersClassesObjs);
+      const usersClasses = await Promise.all(usersClassesPromises);
+      setUsersClassesObjs(usersClasses);
     };
     asyncFunc();
   }, [uid, setUserData, semester]);
@@ -34,7 +37,7 @@ const UsersClasses = () => {
   return (
     <Page>
       <div className="UsersClasses">
-        <ChangeSemester />
+        {userData && <ChangeSemester />}
         {currentUser && currentUser.uid === uid && (
           <Link to="/edit-classes" className="Go-There">
             Edit Classes →
@@ -42,7 +45,20 @@ const UsersClasses = () => {
         )}
 
         <br />
-        <span>{`${userData && userData.displayName}'s Classes`}</span>
+        <span>
+          {userData ? (
+            `${userData.displayName}'s Classes`
+          ) : (
+            <div className="InvalidContainer">
+              <span className="InvalidLink">Not a Valid User</span>
+              <br />
+              <Link className="Go-There" to="/all-users">
+                Click here to go to see all users →
+              </Link>
+            </div>
+          )}
+        </span>
+
         {Object.entries(usersClassesObjs).map(([period, class_]) => {
           if (class_) {
             return (

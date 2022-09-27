@@ -1,0 +1,23 @@
+.ListOfUsers {
+  width: auto;
+  padding: 5px 30px;
+  background-color: #0ff;
+  border: 3px solid #000;
+  border-radius: 10px;
+  margin: 5px 30px;
+}
+
+.SearchBoxUsers {
+  width: auto;
+  padding: 10px;
+  background-color: rgb(26, 255, 0);
+  border: 3px solid #000;
+  border-radius: 10px;
+  margin: 5px 30px;
+}
+
+.SearchBarUsers {
+  height: 20px;
+  font-size: 15px;
+  width: 100%;
+}

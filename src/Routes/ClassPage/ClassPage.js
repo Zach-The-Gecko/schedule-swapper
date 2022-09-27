@@ -1,17 +1,22 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import ListOfUsers from "../../Components/ListOfUsers/ListOfUsers";
 import Page from "../../Components/Page/Page";
 import { getClassByRefID, getUsersData } from "../../utils/firebase";
 import "./ClassPage.css";
 
 const ClassPage = () => {
-  const navigate = useNavigate();
   const classRef = useParams().classId;
   const [users, setUsers] = useState([]);
   useEffect(() => {
     const asyncFunc = async () => {
-      const userRefs = (await getClassByRefID(classRef)).users;
+      const doesClassExist = await getClassByRefID(classRef);
+      if (!doesClassExist) {
+        console.log(doesClassExist);
+        return;
+      }
+      const userRefs = doesClassExist.users;
       const userPromises = userRefs.map(async (userId) => {
         if (userId) {
           return { ...(await getUsersData(userId)), userId };
@@ -27,21 +32,16 @@ const ClassPage = () => {
   return (
     <Page>
       <div className="ClassPage">
-        {users.map((user) => {
-          if (user) {
-            return (
-              <span
-                key={user.ref}
-                onClick={() => navigate(`/user/${user.ref}`)}
-              >
-                {user.displayName}
-                <br key={user.ref} />
-              </span>
-            );
-          } else {
-            return "";
-          }
-        })}
+        <ListOfUsers users={users} />
+        {!users.length && (
+          <div className="InvalidContainer">
+            <span className="InvalidLink">Not a Valid User</span>
+            <br />
+            <Link className="Go-There" to="/all-classes">
+              Click here to find other classes →
+            </Link>
+          </div>
+        )}
       </div>
     </Page>
   );

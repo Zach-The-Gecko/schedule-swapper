@@ -8,7 +8,7 @@
   text-decoration: underline;
   color: #007b00;
   margin-top: 30px;
-  font-size: 1.3em;
+  font-size: 1.3rem;
 }
 
 .semesterBox {
@@ -35,4 +35,14 @@
 }
 .switch {
   margin-top: 6px;
+}
+
+.InvalidContainer {
+  color: #000;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.InvalidUser {
+  text-align: center;
 }

@@ -63,6 +63,9 @@ export const getUsersData = async (uid, semester) => {
   const userDocRef = child(dbRef, `users/${uid}`);
   try {
     const usersData = (await get(userDocRef)).val();
+    if (!usersData) {
+      return null;
+    }
     if (semester) {
       usersData.classes = usersData.classes
         ? usersData.classes[`Semester${semester}`]
