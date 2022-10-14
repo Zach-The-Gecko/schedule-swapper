@@ -5,6 +5,7 @@ import "./App.css";
 import Navbar from "./Components/Navbar/Navbar";
 import Page from "./Components/Page/Page";
 import About from "./Routes/About/About";
+import AllUsers from "./Routes/AllUsers/AllUsers";
 import ClassPage from "./Routes/ClassPage/ClassPage";
 import EditClasses from "./Routes/EditClasses/EditClasses";
 import SignIn from "./Routes/SignIn/SignIn";
@@ -20,6 +21,7 @@ function App() {
         <Route path="/user/:uid" element={<UsersClasses />} />
         <Route path="/edit-classes" element={<EditClasses />} />
         <Route path="/" element={<Page>Root Path</Page>} />
+        <Route path="/all-users" element={<AllUsers/>} />
       </Routes>
       <Navbar />
     </div>
