@@ -1,4 +1,3 @@
-import ListOfUsers from "../../Components/ListOfUsers/ListOfUsers";
 import Page from "../../Components/Page/Page";
 import "./AllUsers.css";
 
