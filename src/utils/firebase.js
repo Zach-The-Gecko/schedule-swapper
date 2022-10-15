@@ -174,3 +174,9 @@ export const deleteAllClasses = async () => {
   await set(usersRef, {});
   console.log("All Deleted!");
 };
+
+export const getAllUsers = async () => {
+  const allUsersDBRef = child(dbRef, `users`)
+  const usersRefs = await (await get(allUsersDBRef)).val()
+  return usersRefs
+}
