@@ -13,7 +13,6 @@ const ClassPage = () => {
     const asyncFunc = async () => {
       const doesClassExist = await getClassByRefID(classRef);
       if (!doesClassExist) {
-        console.log(doesClassExist);
         return;
       }
       const userRefs = doesClassExist.users;

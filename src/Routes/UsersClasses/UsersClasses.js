@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useContext, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import ChangeSemester from "../../Components/ChangeSemester/ChangeSemester";
-import ClassCard from "../../Components/ClassCard/ClassCard";
+import ListOfClassCards from "../../Components/ListOfClassCards/ListOfClassCards";
 import Page from "../../Components/Page/Page";
 import { SemesterContext } from "../../contexts/semester.context";
 import { UserContext } from "../../contexts/user.context";
@@ -59,34 +59,10 @@ const UsersClasses = () => {
           )}
         </span>
 
-        {Object.entries(usersClassesObjs).map(([period, class_]) => {
-          if (class_) {
-            return (
-              <ClassCard
-                class_={class_}
-                period={period}
-                key={`${class_}${period}`}
-                onClick={() => {
-                  console.log("Clicked");
-                }}
-              />
-            );
-          } else {
-            return class_;
-          }
-        })}
+        <ListOfClassCards classes={usersClassesObjs} />
       </div>
     </Page>
   );
 };
 
 export default UsersClasses;
-
-// hash Func -------------------------------------------------------------
-// const str = "mancini_biology_0" + Math.random() + new Date();
-// let hash = 0;
-// for (let i = 0, len = str.length; i < len; i++) {
-//   let chr = str.charCodeAt(i);
-//   hash = (hash << 5) - hash + chr;
-//   hash |= 0; // Convert to 32bit integer
-// }

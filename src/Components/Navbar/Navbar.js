@@ -30,10 +30,10 @@ const Navbar = () => {
         >
           My Classes
         </Link>
-        <Link className="ModalText" onClick={closeModal} to="/">
+        <Link className="ModalText" onClick={closeModal} to="/classes">
           All Classes
         </Link>
-        <Link className="ModalText" onClick={closeModal} to="/">
+        <Link className="ModalText" onClick={closeModal} to="/all-users">
           All People
         </Link>
         {currentUser ? (

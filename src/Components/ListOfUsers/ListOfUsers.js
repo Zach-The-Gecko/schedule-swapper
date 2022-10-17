@@ -12,7 +12,7 @@ const ListOfUsers = ({ users }) => {
   const { currentUser } = useContext(UserContext);
   const [searchInput, setSearchInput] = useState("");
   const searchBarChange = (e) => {
-  setSearchInput(e.target.value);
+    setSearchInput(e.target.value);
   };
   const search = (input, displayName) => {
     const regexStr = Array.from(input.replace(" ", "").toLowerCase()).reduce(
@@ -51,25 +51,31 @@ const ListOfUsers = ({ users }) => {
         {users
           .map((user) => {
             if (user) {
-              return {...user, letters: search(searchInput, user.displayName)};
+              return {
+                ...user,
+                letters: search(searchInput, user.displayName),
+              };
             }
             return false;
           })
           .map((user) => {
             if (user.letters) {
-              const returnVal =Array.from(user.displayName).reduce((acc, letter, letterIndex) => {
-                if(user.letters.includes(letterIndex)){
-                  return acc + `<span class="Highlighted">${letter}</span>`;
-                }
-                return acc + letter
-              }, "")
+              const returnVal = Array.from(user.displayName).reduce(
+                (acc, letter, letterIndex) => {
+                  if (user.letters.includes(letterIndex)) {
+                    return acc + `<span class="Highlighted">${letter}</span>`;
+                  }
+                  return acc + letter;
+                },
+                ""
+              );
 
               return (
                 <span
                   key={user.ref}
                   onClick={() => navigate(`/user/${user.ref}`)}
                 >
-                  <span dangerouslySetInnerHTML={{__html: returnVal}}></span>
+                  <span dangerouslySetInnerHTML={{ __html: returnVal }}></span>
                   {currentUser.uid === user.ref && " (You)"}
                   <br key={user.ref} />
                 </span>

@@ -87,18 +87,19 @@ export const getClassByRefID = async (reference) => {
   return null;
 };
 
-export const getClassesByPeriod = async (period) => {
+export const getClassesByPeriod = async (period, semester) => {
+  const periodNum = parseInt(period);
   const classes = query(
     child(dbRef, `allClasses`),
-    orderByChild("period"),
-    equalTo(period)
+    orderByChild(`period`),
+    equalTo(periodNum)
   );
   try {
-    return Object.entries((await get(classes)).val()).map(
-      ([classRef, otherClassData]) => {
+    return Object.entries((await get(classes)).val())
+      .map(([classRef, otherClassData]) => {
         return { classRef, ...otherClassData };
-      }
-    );
+      })
+      .filter((class_) => class_.semester === `Semester${semester}`);
   } catch (err) {
     console.error(err);
   }
@@ -176,7 +177,7 @@ export const deleteAllClasses = async () => {
 };
 
 export const getAllUsers = async () => {
-  const allUsersDBRef = child(dbRef, `users`)
-  const usersRefs = await (await get(allUsersDBRef)).val()
-  return usersRefs
-}
+  const allUsersDBRef = child(dbRef, `users`);
+  const usersRefs = await (await get(allUsersDBRef)).val();
+  return usersRefs;
+};

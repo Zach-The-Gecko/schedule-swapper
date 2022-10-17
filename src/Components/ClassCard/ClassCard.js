@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./ClassCard.css";
 
-const ClassCard = ({ class_, period, onClick }) => {
+const ClassCard = ({ class_, period }) => {
   const navigate = useNavigate();
   return (
     <div

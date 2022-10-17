@@ -5,24 +5,24 @@ import ListOfUsers from "../../Components/ListOfUsers/ListOfUsers";
 import "./AllUsers.css";
 
 const AllUsers = () => {
-  const [users, setUsers] = useState([])
-  
-  
+  const [users, setUsers] = useState([]);
+
   useEffect(() => {
     const asyncFunc = async () => {
-      const allUsersObjs = await getAllUsers()
-      const arrayOfAllUsers = Object.entries(allUsersObjs).map(([userRef, userObj]) => {
-        return {...userObj, userRef}
-      })
-      setUsers(arrayOfAllUsers)
-    }
-    asyncFunc()
-  }, [setUsers])
+      const allUsersObjs = await getAllUsers();
+      const arrayOfAllUsers = Object.entries(allUsersObjs).map(
+        ([userRef, userObj]) => {
+          return { ...userObj, userRef };
+        }
+      );
+      setUsers(arrayOfAllUsers);
+    };
+    asyncFunc();
+  }, [setUsers]);
   return (
     <Page>
       <div className="AllUsers">
-      <ListOfUsers users={users} />
-      <span>All Users</span>
+        <ListOfUsers users={users} />
       </div>
     </Page>
   );
