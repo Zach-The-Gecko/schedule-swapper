@@ -5,13 +5,13 @@ import "./ListOfClassCards.css";
 const ListOfClassCards = ({ classes }) => {
   return (
     <div className="ListOfClassCards">
-      {Object.entries(classes).map(([index, class_]) => {
+      {Object.values(classes).map((class_, ind) => {
         if (class_) {
           return (
             <ClassCard
+              key={`${class_}${ind}`}
               class_={class_}
               period={class_.period}
-              key={`${class_}${index}`}
             />
           );
         } else {

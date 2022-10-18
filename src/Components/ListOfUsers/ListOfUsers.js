@@ -37,6 +37,24 @@ const ListOfUsers = ({ users }) => {
     return false;
   };
 
+  const isValidSubsequence = (displayName, input) => {
+    let numOfPrevLetters = 0;
+    const letters = [];
+    let slice = displayName.slice(); // start with a shallow copy
+    for (const value of input) {
+      let index = slice.indexOf(value); // find the next sequence value
+      if (index === -1) {
+        return false; // not found, return false immediately
+      }
+      letters.push(index + numOfPrevLetters);
+      numOfPrevLetters = numOfPrevLetters + slice.slice(0, index).length;
+      slice = slice.slice(index); // shrink the window
+    }
+    return letters;
+  };
+
+  isValidSubsequence("zachary geckler", "zachar geckler");
+
   return (
     <div>
       <div className="SearchBoxUsers">

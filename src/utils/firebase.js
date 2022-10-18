@@ -178,6 +178,14 @@ export const deleteAllClasses = async () => {
 
 export const getAllUsers = async () => {
   const allUsersDBRef = child(dbRef, `users`);
-  const usersRefs = await (await get(allUsersDBRef)).val();
+  const usersRefs = (await get(allUsersDBRef)).val();
   return usersRefs;
+};
+
+export const getAllClasses = async (semester) => {
+  const allClassesDBRef = child(dbRef, `allClasses`);
+  const classesRefs = await (await get(allClassesDBRef)).val();
+  return Object.values(classesRefs).filter((class_) => {
+    return class_.semester === `Semester${semester}`;
+  });
 };
